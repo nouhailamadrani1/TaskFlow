@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1703517377030-1" author="Youcode (generated)">
+        <dropForeignKeyConstraint baseTableName="task_tag" constraintName="fk_task_tag_on_tag"/>
+    </changeSet>
+    <changeSet id="1703517377030-2" author="Youcode (generated)">
+        <dropForeignKeyConstraint baseTableName="task_tag" constraintName="fk_task_tag_on_task"/>
+    </changeSet>
+    <changeSet id="1703517377030-3" author="Youcode (generated)">
+        <dropTable cascadeConstraints="true" tableName="task_tag"/>
+    </changeSet>
+
+</databaseChangeLog>
