@@ -21,5 +21,6 @@ public class Tag {
 
     private String name;
 
-
+    @OneToMany(mappedBy = "tag")
+    private Set<TaskTag> taskTags = new HashSet<>();
 }

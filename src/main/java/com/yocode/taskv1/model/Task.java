@@ -34,6 +34,8 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "assignee_id")
     private User assignee;
+    @OneToMany(mappedBy = "task")
+    private Set<TaskTag> taskTags = new HashSet<>();
 
 
 }

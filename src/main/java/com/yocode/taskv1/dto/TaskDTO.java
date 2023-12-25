@@ -2,6 +2,9 @@ package com.yocode.taskv1.dto;
 import com.yocode.taskv1.model.TaskStatus;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -15,5 +18,6 @@ public class TaskDTO {
     private LocalDate endDate;
     private TaskStatus status;
     private Long assigneeId;
+    private Set<Long> tagIds = new HashSet<>();
 
 }
