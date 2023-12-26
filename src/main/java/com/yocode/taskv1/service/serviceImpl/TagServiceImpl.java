@@ -1,7 +1,7 @@
 package com.yocode.taskv1.service.serviceImpl;
 
-
 import com.yocode.taskv1.dto.TagDTO;
+
 import com.yocode.taskv1.mapper.TagMapper;
 import com.yocode.taskv1.model.Tag;
 import com.yocode.taskv1.repository.TagRepository;
@@ -15,11 +15,14 @@ import java.util.stream.Collectors;
 @Service
 public class TagServiceImpl implements TagService {
 
-    @Autowired
-    private TagRepository tagRepository;
+    private final TagRepository tagRepository;
+    private final TagMapper tagMapper;
 
     @Autowired
-    private TagMapper tagMapper;
+    public TagServiceImpl(TagRepository tagRepository, TagMapper tagMapper) {
+        this.tagRepository = tagRepository;
+        this.tagMapper = tagMapper;
+    }
 
     @Override
     public List<TagDTO> getAllTags() {
@@ -30,7 +33,7 @@ public class TagServiceImpl implements TagService {
     @Override
     public TagDTO getTagById(Long tagId) {
         Tag tag = tagRepository.findById(tagId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + tagId));
+                .orElseThrow(() -> new RuntimeException("Tag not found with id: " + tagId));
         return tagMapper.toTagDTO(tag);
     }
 
@@ -43,7 +46,8 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public TagDTO updateTag(Long tagId, TagDTO tagDTO) {
-      return null;
+        // Implement the update logic here
+        return null;
     }
 
     @Override
@@ -51,4 +55,3 @@ public class TagServiceImpl implements TagService {
         tagRepository.deleteById(tagId);
     }
 }
-
