@@ -43,4 +43,9 @@ public class TaskController {
         taskService.deleteTask(taskId);
         return ResponseEntity.noContent().build();
     }
+    @PostMapping("/{taskId}/complete")
+    public ResponseEntity<TaskDTO> completeTask(@PathVariable Long taskId) {
+        TaskDTO completedTask = taskService.completeTask(taskId);
+        return ResponseEntity.ok(completedTask);
+    }
 }
