@@ -11,7 +11,7 @@ public interface TaskService {
 
     TaskDTO getTaskById(Long taskId) throws ChangeSetPersister.NotFoundException;
 
-    TaskDTO createTask(TaskDTO taskDto);
+    TaskDTO createTask(TaskDTO taskDto, Long currentUserId);
 
     TaskDTO updateTask(Long taskId, TaskDTO taskDto);
 

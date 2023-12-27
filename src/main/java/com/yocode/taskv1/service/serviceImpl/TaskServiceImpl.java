@@ -64,31 +64,39 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskDTO createTask(TaskDTO taskDto) {
+    public TaskDTO createTask(TaskDTO taskDto, Long currentUserId) {
+        validateAssigneeAndTagsExistence(taskDto);
 
+        boolean isManager = userService.isUserManager(currentUserId);
+
+        Task task = taskMapper.toTask(taskDto);
 
         if (taskDto.getStartDate() != null) {
             LocalDate currentDate = LocalDate.now();
             LocalDate allowedStartDate = currentDate.plusDays(3);
 
-            if (taskDto.getStartDate().isBefore(allowedStartDate)) {
-                throw new InvalidDateRangeException("Start date must be at least 3 days in advance");
+            if (taskDto.getStartDate().isAfter(allowedStartDate)) {
+                throw new InvalidDateRangeException("The start date is between 3 days from the current day");
             }
         }
         if (taskDto.getStartDate() != null && taskDto.getEndDate() != null
                 && taskDto.getEndDate().isBefore(taskDto.getStartDate())) {
-            throw new InvalidDateRangeException("End date must be after start date ");
+            throw new InvalidDateRangeException("End date must be after start date");
         }
-
-
-        validateAssigneeAndTagsExistence(taskDto);
-
-        Task task = taskMapper.toTask(taskDto);
 
         if (taskDto.getAssigneeId() != null) {
-            UserDTO user = userService.getUserById(taskDto.getAssigneeId());
-            task.setAssignee(userMapper.dtoToEntity(user));
+
+            if (isManager || currentUserId.equals(taskDto.getAssigneeId())) {
+                UserDTO user = userService.getUserById(taskDto.getAssigneeId());
+                task.setAssignee(userMapper.dtoToEntity(user));
+            } else {
+                throw new InvalidDateRangeException("You are not authorized to assign tasks to other users");
+            }
         }
+
+        // Set createdBy using the currentUserId
+        UserDTO createdBy = userService.getUserById(currentUserId);
+        task.setCreatedBy(userMapper.dtoToEntity(createdBy));
 
         Task savedTask = taskRepository.save(task);
 

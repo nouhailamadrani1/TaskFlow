@@ -18,6 +18,7 @@ public class TaskDTO {
     private LocalDate endDate;
     private TaskStatus status;
     private Long assigneeId;
+    private Long createdBy;
     private Set<Long> tagIds = new HashSet<>();
 
 }

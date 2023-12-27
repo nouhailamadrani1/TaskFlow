@@ -9,4 +9,5 @@ public interface UserService {
     UserDTO updateUser(Long userId, UserDTO userDTO);
     void deleteUser(Long userId);
      boolean existsById(Long userId);
+    boolean isUserManager(Long userId);
 }

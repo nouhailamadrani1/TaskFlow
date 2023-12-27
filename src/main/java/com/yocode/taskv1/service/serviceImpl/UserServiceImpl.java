@@ -1,5 +1,4 @@
 package com.yocode.taskv1.service.serviceImpl;
-
 import com.yocode.taskv1.dto.UserDTO;
 import com.yocode.taskv1.exception.UserNotFoundException;
 import com.yocode.taskv1.mapper.UserMapper;
@@ -8,7 +7,6 @@ import com.yocode.taskv1.repository.UserRepository;
 import com.yocode.taskv1.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,5 +67,11 @@ public class UserServiceImpl implements UserService {
             return true;
         }
         return false;
+    }
+    @Override
+    public boolean isUserManager(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
+        return "MANAGER".equalsIgnoreCase(user.getRole().toString());
     }
 }

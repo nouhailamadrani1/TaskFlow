@@ -32,6 +32,9 @@ public class Task {
     private TaskStatus status;
 
     @ManyToOne
+    @JoinColumn(name = "created_by_id")
+    private User CreatedBy;
+    @ManyToOne
     @JoinColumn(name = "assignee_id")
     private User assignee;
     @OneToMany(mappedBy = "task")
