@@ -2,6 +2,7 @@ package com.yocode.taskv1.dto;
 
 
 import com.yocode.taskv1.model.Role;
+import com.yocode.taskv1.model.User;
 import lombok.*;
 
 import java.util.Set;
@@ -16,5 +17,7 @@ public class UserDTO {
     private String username;
     private Role role;
     private Set<TaskDTO> assignedTasks;
+
+
 }
 

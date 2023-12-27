@@ -31,8 +31,9 @@ public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
     private final UserService userService;
-    private final TagService tagService;
+
     private final UserMapper userMapper;
+    private final TagService tagService;
     private final TagMapper tagMapper;
 
     private  final TaskTagRepository taskTagRepository;
