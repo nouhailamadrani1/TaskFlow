@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 
 @Service
 public class RequestServiceImpl implements RequestService {
@@ -68,21 +69,28 @@ public class RequestServiceImpl implements RequestService {
         return requestMapper.toRequestDTO(savedRequest);
     }
 
-    private void validateTokenUsage(Long userId, RequestType requestType) {
+    private void validateTokenUsage(Long createdById, RequestType requestType) {
 
-        long countDay = requestRepository.countByUserIdAndRequestDateAndRequestType(userId, LocalDate.now(), RequestType.TASK_REPLACEMENT);
-        Long monthlyDeletion =requestRepository.countByUserIdAndRequestDateAndRequestType(userId, LocalDate.now(), RequestType.TASK_DELETED);;
+        long countDay = requestRepository.countBycreatedByIdAndRequestDateAndRequestType(createdById, LocalDate.now(), RequestType.TASK_REPLACEMENT);
 
+        YearMonth yearMonth = YearMonth.now();
+        LocalDate startOfMonth = yearMonth.atDay(1);
+        LocalDate endOfMonth = yearMonth.atEndOfMonth();
+
+
+        Long monthlyDeletion = requestRepository.countBycreatedByIdAndRequestDateBetweenAndRequestType(
+                createdById, startOfMonth, endOfMonth, RequestType.TASK_DELETED
+        );
 
         if (RequestType.TASK_REPLACEMENT.equals(requestType)) {
 
             if (countDay >= 2) {
-                throw new InvalidDateRangeException("You have insufficient replacement tokens for today");
+                throw new InvalidDateRangeException("You dont have replacement tokens for today");
             }
         } else if (RequestType.TASK_DELETED.equals(requestType)) {
 
-            if (monthlyDeletion <= 0) {
-                throw new InvalidDateRangeException("You have insufficient deletion tokens for this month");
+            if (monthlyDeletion >= 1) {
+                throw new InvalidDateRangeException("You dont have deletion tokens for this month");
             }
         }
     }
