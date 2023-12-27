@@ -36,29 +36,25 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public RequestDTO createRequest(RequestDTO requestDTO) {
-        Long newAssigneeId = requestDTO.getNewAssigneeId();
         Long createdById = requestDTO.getCreatedById();
         Long oldTaskId = requestDTO.getOldTaskId();
-        Long newTaskId = requestDTO.getNewTaskId();
-        RequestType requestType =requestDTO.getRequestType();
-        RequestStatus requestStatus =requestDTO.getRequestStatus();
+        RequestType requestType = requestDTO.getRequestType();
+        RequestStatus requestStatus = requestDTO.getRequestStatus();
 
-        UserDTO createdBy = userService.getUserById(createdById) ;
-
+        UserDTO createdBy = userService.getUserById(createdById);
         Task oldTask = taskRepository.findById(oldTaskId)
                 .orElseThrow(() -> new InvalidDateRangeException("Task not found with id: " + oldTaskId));
 
 
-        requestDTO.setNewAssigneeId(newAssigneeId);
+        validateTokenUsage(createdById, requestType);
+
         requestDTO.setCreatedById(createdById);
         requestDTO.setOldTaskId(oldTaskId);
-        requestDTO.setNewTaskId(newTaskId);
         requestDTO.setRequestStatus(requestStatus);
         requestDTO.setRequestType(requestType);
         requestDTO.setRequestDate(LocalDate.now());
 
         Request request = requestMapper.toRequest(requestDTO);
-
 
         request.setNewAssignee(null);
         request.setCreatedBy(userMapper.dtoToEntity(createdBy));
@@ -70,5 +66,24 @@ public class RequestServiceImpl implements RequestService {
 
         Request savedRequest = requestRepository.save(request);
         return requestMapper.toRequestDTO(savedRequest);
+    }
+
+    private void validateTokenUsage(Long userId, RequestType requestType) {
+
+        long countDay = requestRepository.countByUserIdAndRequestDateAndRequestType(userId, LocalDate.now(), RequestType.TASK_REPLACEMENT);
+        Long monthlyDeletion =requestRepository.countByUserIdAndRequestDateAndRequestType(userId, LocalDate.now(), RequestType.TASK_DELETED);;
+
+
+        if (RequestType.TASK_REPLACEMENT.equals(requestType)) {
+
+            if (countDay >= 2) {
+                throw new InvalidDateRangeException("You have insufficient replacement tokens for today");
+            }
+        } else if (RequestType.TASK_DELETED.equals(requestType)) {
+
+            if (monthlyDeletion <= 0) {
+                throw new InvalidDateRangeException("You have insufficient deletion tokens for this month");
+            }
+        }
     }
 }
