@@ -21,6 +21,7 @@ public class Tag {
 
     private String name;
 
-    @OneToMany(mappedBy = "tag")
+    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
     private Set<TaskTag> taskTags = new HashSet<>();
+
 }

@@ -15,11 +15,12 @@ public class TaskTag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "task_id")
     private Task task;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tag_id")
     private Tag tag;
 

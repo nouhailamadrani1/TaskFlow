@@ -19,6 +19,7 @@ import com.yocode.taskv1.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
@@ -134,12 +135,18 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void deleteTask(Long taskId) {
-        taskRepository.findById(taskId)
+    public void deleteTask(Long taskId, Long currentUserId) {
+        Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new TaskNotFoundException("Task not found with id: " + taskId));
+        UserDTO loggedInUser = userService.getUserById(currentUserId);
+        if (loggedInUser.getId().equals(task.getCreatedBy().getId()) || loggedInUser.getRole() == Role.MANAGER) {
+            taskRepository.deleteById(taskId);
 
-        taskRepository.deleteById(taskId);
+        } else {
+            throw new UserNotFoundException("You do not have permission to delete this task.");
+        }
     }
+
     @Override
     public TaskDTO completeTask(Long taskId) {
         Task task = taskRepository.findById(taskId)
