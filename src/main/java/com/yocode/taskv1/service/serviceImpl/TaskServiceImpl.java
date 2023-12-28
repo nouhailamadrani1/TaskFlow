@@ -16,15 +16,18 @@ import com.yocode.taskv1.repository.TaskTagRepository;
 import com.yocode.taskv1.service.TaskService;
 import com.yocode.taskv1.service.UserService;
 import com.yocode.taskv1.service.TagService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.AccessDeniedException;
+
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -134,18 +137,24 @@ public class TaskServiceImpl implements TaskService {
      return null;
     }
 
+
+
     @Override
     public void deleteTask(Long taskId, Long currentUserId) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new TaskNotFoundException("Task not found with id: " + taskId));
         UserDTO loggedInUser = userService.getUserById(currentUserId);
-        if (loggedInUser.getId().equals(task.getCreatedBy().getId()) || loggedInUser.getRole() == Role.MANAGER) {
+        if (currentUserId  == task.getCreatedBy().getId()) {
             taskRepository.deleteById(taskId);
-
+            System.out.println("deleted");
+        } else if (loggedInUser.getRole() == Role.MANAGER) {
+            taskRepository.deleteById(taskId);
+            System.out.println("deleted");
         } else {
             throw new UserNotFoundException("You do not have permission to delete this task.");
         }
     }
+
 
     @Override
     public TaskDTO completeTask(Long taskId) {

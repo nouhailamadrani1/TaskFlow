@@ -20,7 +20,7 @@ public class TaskTag {
     @JoinColumn(name = "task_id")
     private Task task;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
