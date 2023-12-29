@@ -33,11 +33,11 @@ public class Task {
 
     @ManyToOne
     @JoinColumn(name = "created_by_id")
-    private User CreatedBy;
+    private User createdBy;
     @ManyToOne
     @JoinColumn(name = "assignee_id")
     private User assignee;
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "task")
     private Set<TaskTag> taskTags = new HashSet<>();
 
 

@@ -40,7 +40,7 @@ public class TaskController {
 
     @DeleteMapping("/{taskId}/{currentUserId}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long taskId,@PathVariable Long currentUserId) {
-        taskService.deleteTask(taskId, currentUserId);
+        taskService.deleteTask(taskId,currentUserId);
         return ResponseEntity.noContent().build();
     }
     @PostMapping("/{taskId}/complete")

@@ -16,18 +16,14 @@ import com.yocode.taskv1.repository.TaskTagRepository;
 import com.yocode.taskv1.service.TaskService;
 import com.yocode.taskv1.service.UserService;
 import com.yocode.taskv1.service.TagService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -99,7 +95,7 @@ public class TaskServiceImpl implements TaskService {
             }
         }
 
-        // Set createdBy using the currentUserId
+        // createdBy
         UserDTO createdBy = userService.getUserById(currentUserId);
         task.setCreatedBy(userMapper.dtoToEntity(createdBy));
 
@@ -134,10 +130,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDTO updateTask(Long taskId, TaskDTO taskDto) {
-     return null;
+        return null;
     }
-
-
 
     @Override
     public void deleteTask(Long taskId, Long currentUserId) {
@@ -154,8 +148,6 @@ public class TaskServiceImpl implements TaskService {
             throw new UserNotFoundException("You do not have permission to delete this task.");
         }
     }
-
-
     @Override
     public TaskDTO completeTask(Long taskId) {
         Task task = taskRepository.findById(taskId)
