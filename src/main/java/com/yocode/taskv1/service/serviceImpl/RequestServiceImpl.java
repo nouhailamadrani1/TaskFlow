@@ -57,10 +57,10 @@ public class RequestServiceImpl implements RequestService {
 
         Request request = requestMapper.toRequest(requestDTO);
 
-        request.setNewAssignee(null);
+
         request.setCreatedBy(userMapper.dtoToEntity(createdBy));
         request.setOldTask(oldTask);
-        request.setNewTask(null);
+
         request.setRequestDate(LocalDate.now());
         request.setRequestStatus(requestStatus);
         request.setRequestType(requestType);
