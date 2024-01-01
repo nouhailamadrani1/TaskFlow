@@ -9,10 +9,8 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring", uses = {UserMapper.class, TaskMapper.class})
 public interface RequestMapper {
     RequestMapper INSTANCE= Mappers.getMapper(RequestMapper.class);
-    //@Mapping(target = "newAssigneeId", source = "newAssignee")
 
     RequestDTO toRequestDTO(Request request);
-
 
 
     Request toRequest(RequestDTO requestDTO);

@@ -95,7 +95,7 @@ public class TaskServiceImpl implements TaskService {
             }
         }
 
-        // createdBy
+
         UserDTO createdBy = userService.getUserById(currentUserId);
         task.setCreatedBy(userMapper.dtoToEntity(createdBy));
 

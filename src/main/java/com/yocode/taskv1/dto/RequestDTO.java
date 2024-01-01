@@ -20,4 +20,5 @@ public class RequestDTO {
     private RequestStatus requestStatus;
     private RequestType requestType;
     private LocalDate requestDate;
+
 }
